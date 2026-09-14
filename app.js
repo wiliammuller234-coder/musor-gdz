@@ -312,29 +312,47 @@ function initFilters() {
 
 function initMotion() {
   const intro = document.querySelector('#intro');
+  const introVideo = intro.querySelector('video');
+  const heroVideo = document.querySelector('#heroVideo');
+  const mobile = window.matchMedia('(max-width: 780px)').matches;
   const finishIntro = () => { intro.classList.add('is-done'); document.querySelector('#heroVideo')?.play().catch(() => {}); };
-  document.querySelector('.intro__skip').addEventListener('click', finishIntro);
-  intro.querySelector('video').addEventListener('ended', finishIntro, { once: true });
-  setTimeout(finishIntro, 5200);
+  if (mobile) {
+    intro.classList.add('is-done');
+    [introVideo, heroVideo].forEach(video => {
+      video?.pause();
+      video?.removeAttribute('src');
+      video?.load();
+    });
+  } else {
+    [introVideo, heroVideo].forEach(video => {
+      video.src = video.dataset.src;
+      video.load();
+    });
+    document.querySelector('.intro__skip').addEventListener('click', finishIntro);
+    introVideo.addEventListener('ended', finishIntro, { once: true });
+    introVideo.play().catch(finishIntro);
+    setTimeout(finishIntro, 5200);
+  }
 
   const observer = new IntersectionObserver(entries => entries.forEach(entry => {
     if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); }
   }), { threshold: .12 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  const pointer = document.querySelector('#pointer');
-  window.addEventListener('pointermove', event => { pointer.style.left = `${event.clientX}px`; pointer.style.top = `${event.clientY}px`; });
-  document.addEventListener('pointerover', event => pointer.classList.toggle('is-big', Boolean(event.target.closest('a,button,input,select,.book-card'))));
+  if (!mobile) {
+    const pointer = document.querySelector('#pointer');
+    window.addEventListener('pointermove', event => { pointer.style.left = `${event.clientX}px`; pointer.style.top = `${event.clientY}px`; });
+    document.addEventListener('pointerover', event => pointer.classList.toggle('is-big', Boolean(event.target.closest('a,button,input,select,.book-card'))));
 
-  const media = document.querySelector('#heroMedia');
-  window.addEventListener('pointermove', event => {
-    if (window.innerWidth < 780) return;
-    const x = (event.clientX / innerWidth - .5) * 8; const y = (event.clientY / innerHeight - .5) * -8;
-    media.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
-  });
+    const media = document.querySelector('#heroMedia');
+    window.addEventListener('pointermove', event => {
+      const x = (event.clientX / innerWidth - .5) * 8; const y = (event.clientY / innerHeight - .5) * -8;
+      media.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+    });
+  }
 
   const floaters = document.querySelector('#floaters');
-  ['∑', 'А', 'x²', '?!', '7', '§', '∆', '42'].forEach((symbol, index) => {
+  if (!mobile) ['∑', 'А', 'x²', '?!', '7', '§', '∆', '42'].forEach((symbol, index) => {
     const item = document.createElement('span'); item.className = 'floater'; item.textContent = symbol;
     item.style.cssText = `left:${(index * 17 + 3) % 93}%;top:${(index * 29 + 8) % 88}%;font-size:${4 + index % 4}rem;--speed:${4 + index}s;--rotate:${index * 17 - 30}deg;--dx:${index % 2 ? 25 : -25}px;--dy:${20 + index * 3}px`;
     floaters.append(item);
@@ -343,6 +361,7 @@ function initMotion() {
 
 function initVideo() {
   const video = document.querySelector('#heroVideo'); const toggle = document.querySelector('#videoToggle');
+  if (window.matchMedia('(max-width: 780px)').matches) { toggle.hidden = true; return; }
   toggle.addEventListener('click', () => {
     if (video.paused) { video.play(); toggle.textContent = 'ПАУЗА'; toggle.setAttribute('aria-label', 'Поставить видео на паузу'); }
     else { video.pause(); toggle.textContent = 'ИГРАТЬ'; toggle.setAttribute('aria-label', 'Воспроизвести видео'); }

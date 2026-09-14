@@ -8,13 +8,13 @@
   <title>Мусор ГДЗ — 1–11 классы</title>
   <link rel="icon" href="assets/musor-gdz-avatar.jpg" type="image/jpeg">
   <link rel="apple-touch-icon" href="assets/musor-gdz-avatar.jpg">
-  <link rel="stylesheet" href="styles.css?v=30">
+  <link rel="stylesheet" href="styles.css?v=32">
 </head>
 <body>
   <a class="skip-link" href="#catalog">К каталогу</a>
 
   <div class="intro" id="intro" aria-hidden="true">
-    <video class="intro__video" src="assets/musor-drop.mp4" autoplay muted playsinline preload="auto"></video>
+    <video class="intro__video" data-src="assets/musor-drop.mp4" muted playsinline preload="none"></video>
     <div class="intro__shade"></div>
     <div class="intro__stamp">Загружаем знания</div>
     <button class="intro__skip" type="button">Пропустить</button>
@@ -62,7 +62,7 @@
         <div class="tape tape--two" aria-hidden="true"></div>
         <div class="video-frame">
           <img class="hero__avatar-art" src="assets/musor-gdz-avatar.jpg" alt="Аватар Мусор ГДЗ">
-          <video id="heroVideo" src="assets/musor-drop.mp4" autoplay muted loop playsinline preload="auto"></video>
+          <video id="heroVideo" data-src="assets/musor-drop.mp4" muted loop playsinline preload="none"></video>
           <div class="video-frame__grain"></div>
           <button class="video-frame__play" id="videoToggle" type="button" aria-label="Поставить видео на паузу">ПАУЗА</button>
         </div>
@@ -247,7 +247,7 @@
   <script src="history-v2-additions.js?v=23"></script>
   <script src="bashkort-course.js?v=26"></script>
   <script src="catalog-expansion.js?v=17"></script>
-  <script src="app.js?v=30"></script>
+  <script src="app.js?v=32"></script>
   <script src="music-player.js?v=31"></script>
 </body>
 </html>

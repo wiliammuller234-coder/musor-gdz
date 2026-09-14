@@ -548,8 +548,21 @@ body::before {
 .music-fab { color: #fff; background: #7f22b7; border-color: #d99df5; box-shadow: 0 0 24px rgba(187, 54, 243, .6); }
 
 @media (max-width: 780px) {
+  html { scroll-behavior: auto; }
+  body::before,
+  .floaters,
+  .pointer,
+  .intro,
+  .video-frame video,
+  .video-frame__grain,
+  .video-frame__play { display: none !important; }
+  .site-header { backdrop-filter: none; }
   .hero__media { width: min(80vw, 530px); }
-  .video-frame { box-shadow: 0 0 0 7px rgba(105, 23, 151, .32), 0 0 28px 5px #9b28df, 0 0 65px 12px rgba(131, 24, 196, .48), inset 0 0 36px #7a20bd; }
+  .video-frame { animation: none; box-shadow: 0 0 0 5px rgba(105, 23, 151, .32), 0 0 24px 4px #9b28df, inset 0 0 25px #7a20bd; }
+  .sticker,
+  .ticker__track { animation: none; }
+  .drawer-backdrop { backdrop-filter: none; }
+  .book-card { animation-duration: .18s; }
   .book-grid { padding: 8px 14px; }
 }
 
