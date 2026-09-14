@@ -54,6 +54,7 @@ const els = {
 let activeBook = null;
 let activeCourse = null;
 let activeTasks = [];
+let activeChapterIndex = 0;
 
 function normalize(value) { return value.toLowerCase().replace(/ё/g, 'е').trim(); }
 function filteredBooks() {
@@ -152,14 +153,25 @@ function openBook(id) {
   }
   if (activeCourse) {
     let fallbackNumber = 0;
-    activeTasks = activeCourse.flatMap(chapter => chapter.tasks.map(task => {
+    activeTasks = activeCourse.flatMap((chapter, chapterIndex) => chapter.tasks.map(task => {
       fallbackNumber += 1;
       const number = task.number ?? fallbackNumber;
-      return { ...task, __number: number, __key: String(task.key ?? number), __label: String(task.label ?? number), __chapter: chapter.title };
+      const label = String(task.label ?? number);
+      return {
+        ...task,
+        __number: number,
+        __key: String(task.key ?? number),
+        __label: label,
+        __buttonLabel: compactTaskLabel(label, number),
+        __chapter: chapter.title,
+        __chapterIndex: chapterIndex
+      };
     }));
+    activeChapterIndex = 0;
     els.exerciseSearch.value = '';
     const repeatedNumbers = new Set(activeTasks.map(task => task.__number)).size !== activeTasks.length;
     els.exerciseSearch.placeholder = repeatedNumbers ? 'Например, 1.2-3' : 'Например, 312';
+    renderChapterPicker();
     renderTasks();
   }
   els.solution.hidden = true;
@@ -175,9 +187,73 @@ function normalizeTaskQuery(value) {
   return String(value).toLowerCase().replace(/[§№]/g, '').trim().replace(/[–—]/g, '-').replace(/\s+/g, '-').replace(/,+/g, '.');
 }
 
+function compactTaskLabel(label, number) {
+  const afterNumberSign = String(label).match(/№\s*([^\s·]+)/iu);
+  if (afterNumberSign) return afterNumberSign[1];
+  const pieces = String(label).split('·');
+  if (pieces.length > 1) return pieces.at(-1).trim().replace(/^№\s*/iu, '');
+  return String(label).length <= 10 ? String(label).replace(/^№\s*/iu, '') : String(number);
+}
+
+function syncChapterPicker() {
+  const select = els.chapters.querySelector('select');
+  if (!select) return;
+  select.value = String(activeChapterIndex);
+  els.chapters.querySelector('[data-direction="prev"]').disabled = activeChapterIndex === 0;
+  els.chapters.querySelector('[data-direction="next"]').disabled = activeChapterIndex === activeCourse.length - 1;
+}
+
+function chooseChapter(index) {
+  activeChapterIndex = Math.max(0, Math.min(Number(index), activeCourse.length - 1));
+  els.exerciseSearch.value = '';
+  els.solution.hidden = true;
+  syncChapterPicker();
+  renderTasks();
+}
+
+function renderChapterPicker() {
+  els.chapters.replaceChildren();
+  els.chapters.hidden = activeCourse.length <= 1;
+  if (activeCourse.length <= 1) return;
+
+  const nav = document.createElement('div');
+  nav.className = 'chapter-nav';
+  const previous = document.createElement('button');
+  previous.type = 'button';
+  previous.dataset.direction = 'prev';
+  previous.textContent = '‹';
+  previous.setAttribute('aria-label', 'Предыдущий раздел');
+
+  const label = document.createElement('label');
+  const caption = document.createElement('span');
+  caption.textContent = 'Раздел или параграф';
+  const select = document.createElement('select');
+  select.setAttribute('aria-label', 'Выбрать раздел или параграф');
+  activeCourse.forEach((chapter, index) => {
+    const option = document.createElement('option');
+    option.value = String(index);
+    option.textContent = `${chapter.title} — ${chapter.tasks.length} заданий`;
+    select.append(option);
+  });
+  label.append(caption, select);
+
+  const next = document.createElement('button');
+  next.type = 'button';
+  next.dataset.direction = 'next';
+  next.textContent = '›';
+  next.setAttribute('aria-label', 'Следующий раздел');
+  nav.append(previous, label, next);
+  els.chapters.append(nav);
+
+  select.addEventListener('change', () => chooseChapter(select.value));
+  previous.addEventListener('click', () => chooseChapter(activeChapterIndex - 1));
+  next.addEventListener('click', () => chooseChapter(activeChapterIndex + 1));
+  syncChapterPicker();
+}
+
 function matchingTasks(filter = '') {
   const query = normalizeTaskQuery(filter);
-  if (!query) return activeTasks;
+  if (!query) return activeTasks.filter(item => item.__chapterIndex === activeChapterIndex);
   const exact = activeTasks.filter(item => normalizeTaskQuery(item.__key) === query || normalizeTaskQuery(item.__label) === query || String(item.__number) === query);
   if (exact.length) return exact;
   return activeTasks.filter(item => normalizeTaskQuery(item.__key).includes(query) || normalizeTaskQuery(item.__label).includes(query) || String(item.__number).includes(query));
@@ -186,17 +262,35 @@ function matchingTasks(filter = '') {
 function renderTasks(filter = '') {
   const query = normalizeTaskQuery(filter);
   const tasks = matchingTasks(filter);
-  els.exerciseCount.textContent = query ? `Найдено номеров: ${tasks.length}` : `Все упражнения: ${tasks.length}`;
-  els.tasks.classList.toggle('task-grid--labels', activeTasks.some(item => item.__label !== String(item.__number)));
-  els.tasks.innerHTML = tasks.map(item => {
-    return `<button type="button" data-key="${item.__key}" aria-label="${item.__label}: ${item.question}">${item.__label}</button>`;
-  }).join('');
-  els.tasks.querySelectorAll('button').forEach(button => button.addEventListener('click', () => showSolution(button.dataset.key)));
+  els.exerciseCount.textContent = query
+    ? `Найдено: ${tasks.length}`
+    : `${activeChapterIndex + 1} из ${activeCourse.length} · заданий: ${tasks.length}`;
+  els.tasks.classList.toggle('task-grid--search', Boolean(query));
+  const fragment = document.createDocumentFragment();
+  tasks.forEach(item => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.dataset.key = item.__key;
+    button.setAttribute('aria-label', `${item.__label}. ${item.__chapter}`);
+    const number = document.createElement('span');
+    number.textContent = item.__buttonLabel;
+    button.append(number);
+    if (query) {
+      const context = document.createElement('small');
+      context.textContent = item.__chapter;
+      button.append(context);
+    }
+    button.addEventListener('click', () => showSolution(item.__key));
+    fragment.append(button);
+  });
+  els.tasks.replaceChildren(fragment);
 }
 
 function showSolution(key) {
   const taskData = activeTasks.find(item => item.__key === String(key));
   if (!taskData) return;
+  activeChapterIndex = taskData.__chapterIndex;
+  syncChapterPicker();
   const pageUrl = new URL(window.location.href);
   pageUrl.searchParams.set('book', activeBook.slug || String(activeBook.id));
   pageUrl.searchParams.set('exercise', taskData.__key);

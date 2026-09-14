@@ -194,9 +194,13 @@ button { color: inherit; }
 .source-notice { margin-top: 28px; padding: 22px; border: var(--line); background: var(--yellow); box-shadow: 6px 6px 0 var(--ink); }
 .source-notice strong { font-family: var(--display); font-size: 1.65rem; }
 .source-notice p { margin-bottom: 0; line-height: 1.5; font-weight: 700; }
-.chapter-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; }
-.chapter-tabs button { flex: 0 0 auto; padding: 10px 13px; border: 2px solid var(--ink); background: #fff; font-weight: 900; cursor: pointer; }
-.chapter-tabs button.is-active { background: var(--yellow); }
+.chapter-tabs { margin-bottom: 12px; }
+.chapter-nav { display: grid; grid-template-columns: 48px minmax(0, 1fr) 48px; gap: 8px; align-items: end; }
+.chapter-nav label { min-width: 0; }
+.chapter-nav label span { display: block; margin-bottom: 6px; font-weight: 950; }
+.chapter-nav select { width: 100%; min-width: 0; height: 48px; padding: 0 34px 0 11px; border: 2px solid var(--ink); background: #fff; font-weight: 850; text-overflow: ellipsis; }
+.chapter-nav button { width: 48px; height: 48px; padding: 0; border: 2px solid var(--ink); background: #fff; font-size: 1.8rem; font-weight: 950; cursor: pointer; }
+.chapter-nav button:disabled { cursor: default; opacity: .35; }
 .exercise-search { margin-bottom: 12px; padding: 14px; border: var(--line); background: var(--yellow); }
 .exercise-search label { display: block; margin-bottom: 8px; font-weight: 950; }
 .exercise-search > div { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
@@ -204,10 +208,12 @@ button { color: inherit; }
 .exercise-search button { padding: 0 18px; border: 3px solid var(--ink); background: var(--blue); color: #fff; font-weight: 950; cursor: pointer; box-shadow: 3px 3px 0 var(--ink); }
 .exercise-count { margin: 10px 0; font-weight: 850; }
 .task-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; }
-.task-grid button { aspect-ratio: 1; border: 2px solid var(--ink); background: #fff; font-weight: 900; cursor: pointer; transition: transform .15s, background .15s; }
+.task-grid button { min-width: 0; aspect-ratio: 1; border: 2px solid var(--ink); background: #fff; font-weight: 900; cursor: pointer; transition: transform .15s, background .15s; }
 .task-grid button:hover { transform: rotate(-6deg) scale(1.12); background: var(--orange); }
-.task-grid--labels { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.task-grid--labels button { min-height: 48px; aspect-ratio: auto; padding: 7px 5px; font-size: .78rem; line-height: 1.15; }
+.task-grid--search { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.task-grid--search button { min-height: 62px; aspect-ratio: auto; padding: 8px; text-align: left; }
+.task-grid--search button span { display: block; color: var(--orange); font-size: 1rem; }
+.task-grid--search button small { display: -webkit-box; margin-top: 3px; overflow: hidden; font-size: .7rem; line-height: 1.2; opacity: .76; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .solution { margin-top: 28px; padding: 22px; border: var(--line); background: #fff; box-shadow: 7px 7px 0 var(--ink); animation: solution-in .4s both; }
 @keyframes solution-in { from { opacity: 0; transform: translateY(25px) rotate(1deg); } }
 .solution__top { display: flex; justify-content: space-between; align-items: center; font-weight: 900; }
@@ -297,13 +303,28 @@ button { color: inherit; }
   .book-card { min-height: 205px; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; }
   .book-cover { width: 92px; height: 142px; }
   .book-meta { font-size: .8rem; }
-  .task-grid { grid-template-columns: repeat(6, 1fr); }
-  .drawer { border-left: 0; padding-top: 80px; }
-  .drawer__book-head { grid-template-columns: 82px 1fr; gap: 14px; }
-  .drawer__cover { width: 82px; min-height: 108px; }
-  .drawer__cover img { height: 108px; }
-  .exercise-search > div { grid-template-columns: 1fr; }
-  .exercise-search button { min-height: 46px; }
+  .task-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 7px; }
+  .task-grid button { min-height: 48px; aspect-ratio: 1; }
+  .task-grid--search { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .task-grid--search button { min-height: 64px; aspect-ratio: auto; }
+  .drawer { border-left: 0; padding: 66px 12px 88px; }
+  .drawer__book-head { grid-template-columns: 70px 1fr; gap: 12px; margin-block: 4px 16px; padding-bottom: 15px; }
+  .drawer__cover { width: 70px; min-height: 92px; }
+  .drawer__cover img { height: 92px; }
+  .drawer h2 { max-width: calc(100% - 28px); font-size: 1.75rem; }
+  .drawer__part { font-size: 1rem; }
+  .drawer__authors { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+  .drawer__badges { margin-top: 7px; }
+  .drawer__badges span { padding: 4px 7px; font-size: .72rem; }
+  .task-picker { padding-top: 15px; }
+  .task-picker h3 { margin: 0 0 10px; font-size: 1.65rem; }
+  .exercise-search { padding: 10px; }
+  .exercise-search > div { grid-template-columns: minmax(0, 1fr) 76px; }
+  .exercise-search input { padding: 11px 10px; font-size: 1rem; }
+  .exercise-search button { min-height: 46px; padding: 0 8px; }
+  .chapter-nav { grid-template-columns: 44px minmax(0, 1fr) 44px; gap: 6px; }
+  .chapter-nav button, .chapter-nav select { height: 44px; }
+  .chapter-nav button { width: 44px; }
   .music-player { right: 10px; bottom: 10px; width: calc(100vw - 20px); }
   .music-fab { right: 14px; bottom: 14px; }
 }
@@ -518,10 +539,13 @@ body::before {
 .drawer__badges span { color: #13071a; background: #bff3e6; border-color: #e8fff9; }
 .source-notice { color: #eadcf0; background: #261030; border-color: #a95dcc; box-shadow: 6px 6px 0 #030104; }
 .source-notice__link { background: #7823b1; border-color: #d6a4ee; box-shadow: 3px 3px 0 #030104; }
-.chapter-tabs button,
+.chapter-nav select,
+.chapter-nav button,
 .task-grid button { color: #e7daed; background: #140a1b; border-color: #74418a; }
-.chapter-tabs button.is-active,
+.chapter-nav button:not(:disabled):hover,
 .task-grid button:hover { color: #fff; background: #7f24b9; }
+.chapter-nav select:focus-visible,
+.chapter-nav button:focus-visible { outline: 3px solid #d78cff; outline-offset: 2px; }
 .exercise-search { background: #1d0c27; border-color: #9750ba; }
 .exercise-search input { color: #fff; background: #0b0610; border-color: #8b4aa8; }
 .exercise-search button { color: #fff; background: #7e25b8; border-color: #cc8bec; box-shadow: 3px 3px 0 #020103; }
