@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#09040f">
+  <meta name="description" content="Мусор ГДЗ — каталог учебников и разборов заданий для 1–11 классов.">
+  <title>Мусор ГДЗ — 1–11 классы</title>
+  <link rel="icon" href="assets/musor-gdz-avatar.jpg" type="image/jpeg">
+  <link rel="apple-touch-icon" href="assets/musor-gdz-avatar.jpg">
+  <link rel="stylesheet" href="styles.css?v=30">
+</head>
+<body>
+  <a class="skip-link" href="#catalog">К каталогу</a>
+
+  <div class="intro" id="intro" aria-hidden="true">
+    <video class="intro__video" src="assets/musor-drop.mp4" autoplay muted playsinline preload="auto"></video>
+    <div class="intro__shade"></div>
+    <div class="intro__stamp">Загружаем знания</div>
+    <button class="intro__skip" type="button">Пропустить</button>
+  </div>
+
+  <div class="pointer" id="pointer" aria-hidden="true"></div>
+  <div class="floaters" id="floaters" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Мусор ГДЗ — на главную">
+      <img class="brand__avatar" src="assets/musor-gdz-avatar.jpg" alt="" width="50" height="50">
+      <span>Мусор<br>ГДЗ</span>
+    </a>
+    <nav class="nav" aria-label="Главная навигация">
+      <a href="#catalog">Учебники</a>
+      <a href="#how">Как пользоваться</a>
+      <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false">
+        <span aria-hidden="true">♪</span> Музыка
+      </button>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__copy">
+        <div class="scribble" aria-hidden="true">не списывай — разбирайся</div>
+        <h1 id="hero-title">
+          <span class="hero__line hero__line--one">Мусор</span>
+          <span class="hero__line hero__line--two">ГДЗ</span>
+        </h1>
+        <p class="hero__lead">Учебники и решения для 1–11 классов. Старые и новые издания — быстро, понятно и без скучной рекламы.</p>
+        <div class="hero__actions">
+          <a class="button button--primary magnetic" href="#catalog">Найти учебник</a>
+          <button class="button button--ghost magnetic" id="randomBook" type="button">Мне повезёт</button>
+        </div>
+        <div class="hero__stats" aria-label="Статистика каталога">
+          <span><strong id="bookTotal">0</strong> учебников</span>
+          <span><strong>11</strong> классов</span>
+          <span><strong>∞</strong> попыток</span>
+        </div>
+      </div>
+
+      <div class="hero__media" id="heroMedia">
+        <div class="tape tape--one" aria-hidden="true"></div>
+        <div class="tape tape--two" aria-hidden="true"></div>
+        <div class="video-frame">
+          <img class="hero__avatar-art" src="assets/musor-gdz-avatar.jpg" alt="Аватар Мусор ГДЗ">
+          <video id="heroVideo" src="assets/musor-drop.mp4" autoplay muted loop playsinline preload="auto"></video>
+          <div class="video-frame__grain"></div>
+          <button class="video-frame__play" id="videoToggle" type="button" aria-label="Поставить видео на паузу">ПАУЗА</button>
+        </div>
+        <div class="sticker sticker--grade">1–11<br><small>класс</small></div>
+        <div class="sticker sticker--new">новые<br>+ старые</div>
+        <div class="orbit-word orbit-word--one" aria-hidden="true">алгебра</div>
+        <div class="orbit-word orbit-word--two" aria-hidden="true">русский</div>
+      </div>
+    </section>
+
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker__track">
+        <span>МАТЕМАТИКА ✦ РУССКИЙ ЯЗЫК ✦ АЛГЕБРА ✦ ФИЗИКА ✦ БИОЛОГИЯ ✦ ИСТОРИЯ ✦</span>
+        <span>МАТЕМАТИКА ✦ РУССКИЙ ЯЗЫК ✦ АЛГЕБРА ✦ ФИЗИКА ✦ БИОЛОГИЯ ✦ ИСТОРИЯ ✦</span>
+      </div>
+    </div>
+
+    <section class="catalog" id="catalog" aria-labelledby="catalog-title">
+      <div class="section-heading reveal">
+        <p class="marker-note">Выбирай свой</p>
+        <h2 id="catalog-title">Учебник</h2>
+        <p>Поиск работает сразу. Можно выбрать класс, предмет и издание.</p>
+      </div>
+
+      <div class="finder reveal">
+        <label class="search">
+          <span class="search__icon" aria-hidden="true">⌕</span>
+          <span class="sr-only">Поиск учебника</span>
+          <input id="searchInput" type="search" placeholder="Автор, предмет или название…" autocomplete="off">
+          <kbd>Ctrl K</kbd>
+        </label>
+
+        <div class="filter-row" aria-label="Фильтры каталога">
+          <div class="segmented" id="gradeFilter" aria-label="Класс">
+            <button class="is-active" type="button" data-value="all">Все классы</button>
+            <button type="button" data-value="1">1</button>
+            <button type="button" data-value="2">2</button>
+            <button type="button" data-value="3">3</button>
+            <button type="button" data-value="4">4</button>
+            <button type="button" data-value="5">5</button>
+            <button type="button" data-value="6">6</button>
+            <button type="button" data-value="7">7</button>
+            <button type="button" data-value="8">8</button>
+            <button type="button" data-value="9">9</button>
+            <button type="button" data-value="10">10</button>
+            <button type="button" data-value="11">11</button>
+          </div>
+          <label class="select-wrap">
+            <span>Предмет</span>
+            <select id="subjectFilter"><option value="all">Все предметы</option></select>
+          </label>
+          <label class="select-wrap">
+            <span>Издание</span>
+            <select id="editionFilter">
+              <option value="all">Любое</option>
+              <option value="new">Новое</option>
+              <option value="old">Старое</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="catalog__meta reveal">
+        <p>Найдено: <strong id="resultCount">20</strong></p>
+        <button id="resetFilters" type="button">Сбросить фильтры</button>
+      </div>
+      <div class="book-grid" id="bookGrid" aria-live="polite"></div>
+      <div class="empty-state" id="emptyState" hidden>
+        <div aria-hidden="true">🗑️</div>
+        <h3>Такого учебника пока нет</h3>
+        <p>Попробуй убрать часть запроса или сбросить фильтры.</p>
+        <button class="button button--primary" type="button" id="emptyReset">Показать все</button>
+      </div>
+    </section>
+
+    <section class="how" id="how" aria-labelledby="how-title">
+      <div class="how__title reveal">
+        <p class="marker-note">Три движения</p>
+        <h2 id="how-title">Не потеряйся</h2>
+      </div>
+      <ol class="steps">
+        <li class="step reveal"><span>1</span><h3>Выбери учебник</h3><p>Найди обложку по классу, предмету или фамилии автора.</p></li>
+        <li class="step reveal"><span>2</span><h3>Открой задание</h3><p>Укажи параграф и номер, чтобы не листать лишнее.</p></li>
+        <li class="step reveal"><span>3</span><h3>Проверь решение</h3><p>Посмотри ход рассуждений и сверь свой ответ.</p></li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__word" aria-hidden="true">МУСОР</div>
+    <p><strong>Мусор ГДЗ</strong><br>Сделано для учёбы, а не для бездумного списывания.</p>
+    <a href="#top">Наверх ↑</a>
+  </footer>
+
+  <section class="music-player" id="musicPlayer" aria-label="Музыкальный проигрыватель">
+    <div class="music-player__head">
+      <div class="equalizer" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="music-player__title">
+        <small>МУСОР FM · 18 ТРЕКОВ</small>
+        <strong id="musicTrackTitle">Трек 01</strong>
+      </div>
+      <button class="music-player__minimize" id="musicMinimize" type="button" aria-label="Свернуть проигрыватель">−</button>
+    </div>
+    <select class="music-player__select" id="musicTrackSelect" aria-label="Выбрать музыкальный трек"></select>
+    <div class="music-player__controls">
+      <button id="musicPrev" type="button" aria-label="Предыдущий трек">‹</button>
+      <button class="music-player__play" id="musicPlay" type="button" aria-label="Включить музыку">▶</button>
+      <button id="musicNext" type="button" aria-label="Следующий трек">›</button>
+      <span id="musicTime">0:00 / 0:00</span>
+    </div>
+    <input class="music-player__progress" id="musicProgress" type="range" min="0" max="100" step="0.1" value="0" aria-label="Позиция воспроизведения">
+    <label class="music-player__volume">
+      <span aria-hidden="true">♬</span>
+      <span class="sr-only">Громкость</span>
+      <input id="musicVolume" type="range" min="0" max="1" step="0.05" value="0.55">
+    </label>
+    <audio id="musicAudio" preload="metadata"></audio>
+  </section>
+  <button class="music-fab" id="musicFab" type="button" aria-label="Открыть музыкальный проигрыватель" hidden>♪</button>
+
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <aside class="drawer" id="bookDrawer" aria-hidden="true" aria-labelledby="drawerTitle">
+    <button class="drawer__close" id="drawerClose" type="button" aria-label="Закрыть">×</button>
+    <div class="drawer__book-head">
+      <div class="drawer__cover" id="drawerCoverWrap">
+        <img id="drawerCover" alt="">
+        <span id="drawerIcon" aria-hidden="true"></span>
+      </div>
+      <div>
+        <p class="drawer__subject" id="drawerSubject"></p>
+        <h2 id="drawerTitle"></h2>
+        <p class="drawer__part" id="drawerPart"></p>
+        <p class="drawer__authors" id="drawerAuthors"></p>
+        <div class="drawer__badges" id="drawerBadges"></div>
+      </div>
+    </div>
+    <div class="source-notice" id="sourceNotice" hidden>
+      <strong>Обложка и авторы уже добавлены</strong>
+      <p>Чтобы номера совпали без ошибок, загрузи PDF, DJVU или фотографии именно этого издания. После этого добавим задания и наши решения.</p>
+    </div>
+    <div class="task-picker" id="taskPicker">
+      <h3>Найди упражнение</h3>
+      <form class="exercise-search" id="exerciseSearchForm">
+        <label for="exerciseSearch">Введи номер из учебника</label>
+        <div>
+          <input id="exerciseSearch" type="search" placeholder="Например, 12" autocomplete="off">
+          <button type="submit">Найти</button>
+        </div>
+      </form>
+      <p class="exercise-count" id="exerciseCount"></p>
+      <div class="chapter-tabs" id="chapterTabs" hidden></div>
+      <div class="task-grid" id="taskGrid"></div>
+    </div>
+    <div class="solution" id="solutionBox" hidden>
+      <div class="solution__top"><span id="solutionStatusLabel">Полное решение</span><strong id="solutionNumber"></strong></div>
+      <div class="solution__task"><span id="solutionTaskLabel">Задание из учебника</span><div id="solutionQuestion"></div></div>
+      <div class="solution__answer" id="solutionAnswerBlock"><span>Готовый ответ</span><div id="solutionAnswer"></div></div>
+      <h3 class="solution__steps-title" id="solutionStepsTitle">Как решено</h3>
+      <ol id="solutionSteps"></ol>
+      <div class="solution__rule" id="solutionRuleBlock"><strong>Правило:</strong> <span id="solutionRule"></span></div>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="russian-course.js?v=9"></script>
+  <script src="textbook-data.js?v=9"></script>
+  <script src="textbook-course.js?v=10"></script>
+  <script src="indexed-courses.js?v=15"></script>
+  <script src="russian-part2-solutions.js?v=20"></script>
+  <script src="russian-part2-missing-solutions.js?v=21"></script>
+  <script src="geography-course.js?v=15"></script>
+  <script src="geography-solutions.js?v=23"></script>
+  <script src="probability-courses.js?v=29"></script>
+  <script src="probability-part1-solutions.js?v=29"></script>
+  <script src="probability-part2-solutions.js?v=29"></script>
+  <script src="physics-course.js?v=29"></script>
+  <script src="native-courses.js?v=18"></script>
+  <script src="native-russian-solutions.js?v=19"></script>
+  <script src="biology-course.js?v=18"></script>
+  <script src="biology-solutions.js?v=18"></script>
+  <script src="history-course.js?v=22"></script>
+  <script src="history-v2-additions.js?v=23"></script>
+  <script src="bashkort-course.js?v=26"></script>
+  <script src="catalog-expansion.js?v=17"></script>
+  <script src="app.js?v=30"></script>
+  <script src="music-player.js?v=30"></script>
+</body>
+</html>
