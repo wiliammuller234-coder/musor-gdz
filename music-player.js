@@ -64,6 +64,7 @@
   const loadTrack = (index, shouldPlay = false) => {
     currentIndex = (index + tracks.length) % tracks.length;
     audio.src = `assets/music/${tracks[currentIndex]}`;
+    audio.load();
     title.textContent = `Трек ${String(currentIndex + 1).padStart(2, '0')}`;
     select.value = String(currentIndex);
     progress.value = '0';
@@ -83,13 +84,18 @@
   loadTrack(currentIndex);
 
   playButton.addEventListener('click', togglePlayback);
-  headerToggle.addEventListener('click', togglePlayback);
+  headerToggle.addEventListener('click', () => {
+    player.classList.remove('is-minimized');
+    fab.hidden = true;
+    togglePlayback();
+  });
   previousButton.addEventListener('click', () => loadTrack(currentIndex - 1, true));
   nextButton.addEventListener('click', () => loadTrack(currentIndex + 1, true));
   select.addEventListener('change', () => loadTrack(Number(select.value), !audio.paused));
   audio.addEventListener('play', updatePlayingState);
   audio.addEventListener('pause', updatePlayingState);
   audio.addEventListener('ended', () => loadTrack(currentIndex + 1, true));
+  audio.addEventListener('error', () => showToast('Трек не загрузился — обнови страницу и нажми ▶ ещё раз'));
   audio.addEventListener('loadedmetadata', updateTime);
   audio.addEventListener('timeupdate', updateTime);
   progress.addEventListener('input', () => {
